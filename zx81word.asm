@@ -7,7 +7,7 @@ format zx81
 					   // default value is MEM_16K
 	STARTMODE  EQU	   SLOW_MODE	   // SLOW or FAST
 	DFILETYPE  EQU	   AUTO 	   // COLLAPSED or EXPANDED or AUTO
-	STARTUPMSG EQU	  'PRINT A BLACK SQUARE ON SCREEN' // any message will be shown on screen after loading, max. 32 chars
+	STARTUPMSG EQU	  'WORD MASTER' // any message will be shown on screen after loading, max. 32 chars
 
 	include 'SINCL-ZX\ZX81.INC'	   // definitions of constants
 ;LISTON
@@ -2104,19 +2104,17 @@ WORDS:
 	END _asm
 
 ;AUTORUN:
-29 FOR I=1 TO 10
 30 LET R=INT(RND * 2084) * 5
-40 PRINT "R=";R;" ";
+;40 PRINT "R=";R;" ";
 50 DIM A$(5)
 60 FOR N=0 TO 4
 65 LET B=16514+R+N
 70 LET P=PEEK(B)
 80 LET A$(N+1)=CHR$ P
 90 NEXT N
-95 PRINT A$(1);A$(2);A$(3);A$(4);A$(5)
-100 NEXT I
-;110 LET W = A$(1)+ A$(2)+ A$(3)+ A$(4) + A$(5)
-;120 PRINT W
+;95 PRINT A$(1);A$(2);A$(3);A$(4);A$(5)
+110 LET W$ = A$(1) + A$(2)+ A$(3)+ A$(4) + A$(5)
+120 PRINT W$
 
 	include 'SINCL-ZX\ZX81DISP.INC' 	 ; include D_FILE and needed memory areas
 VARS_ADDR:
