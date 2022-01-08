@@ -1,42 +1,54 @@
-  1 REM WORD MASTER
- 10 LET W$ = "TABLE"
- 20 LET L=2
- 25 LET O=0
- 30 LET ROW = 2
- 32 LET X$ = ""
- 34 LET Y$ = ""
- 35 FOR T=1 TO 6
- 40    INPUT I$
- 50    IF LEN I$<>5 THEN GOTO 60
- 60    PRINT AT L*T,13;I$ + " "
- 70    LET C=0
- 80    FOR X=1 TO LEN W$
- 90        FOR Y=1 TO LEN W$
-100            IF I$(Y)=W$(X) AND Y=X THEN GOSUB 200
-110            IF I$(Y)=W$(X) AND Y<>X THEN LET Y$=Y$+" "+I$(Y)
-120        NEXT Y
-130    NEXT X
-140    IF O = 5 THEN GOTO 230
-145    GOSUB 200
-150 NEXT T
-160 GOTO 250
+    REM WORD MASTER
+@init:    
+    LET W$ = "TABLE"
+    LET L=2
+    LET ROW = 2
+    LET COUNT = 0
 
-190 REM LETTER AT RIGHT LOCATION
-200 LET X$=X$+" "+I$(Y)
-210 LET O=O+1
-220 RETURN
+    GOTO @main
 
-230 REM WON
-240 PRINT AT 21,0;"YOU WON IN " + T + "TURNS";
-250 GOTO 320
 
-260 REM END OF TURN
-270 PRINT X$ + "BIEN PLACE"
-280 PRINT Y$ + "MAL PLACE"
-290 RETURN
+@perfectmatch:
+    REM add right letter at right location to X$
+    LET X$=X$+I$(Y)
+    RETURN
 
-300 REM LOST
-310 PRINT AT 21,0;"YOU LOST";
 
-320 PRINT " BYE"
-330 STOP     
+@match:
+    REM add right letter at wrong location to Y$
+    LET Y$=Y$+I$(Y)
+    RETURN
+
+@won:
+    PRINT "YOU WON IN " + STR$ COUNT + " TURNS";
+    STOP
+
+@turnresults:
+    PRINT X$ + " / " + Y$
+    RETURN
+
+@lost:
+    PRINT "YOU LOST";
+    PRINT " BYE"
+    STOP     
+
+@main:
+    FOR T=1 TO 6
+        LET COUNT = COUNT + 1
+        REM X$ CORRECT LETTERS AT CORRECT LOCATION 
+        LET X$ = ""
+        REM Y$ CORRECT LETTERS AT WRONG LOCATION
+        LET Y$ = ""
+        INPUT I$
+        IF LEN I$<>5 THEN GOTO 60
+        PRINT AT L*T,0;I$ + ": ";
+        FOR X=1 TO LEN W$
+            FOR Y=1 TO LEN W$
+                IF I$(Y)=W$(X) AND Y=X THEN GOSUB @perfectmatch
+                IF I$(Y)=W$(X) AND Y<>X THEN GOSUB @match
+            NEXT Y
+        NEXT X
+        IF LEN X$ = 5 THEN GOTO @won
+        GOSUB @turnresults
+    NEXT T
+    GOTO @lost
