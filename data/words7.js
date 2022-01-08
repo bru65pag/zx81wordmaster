@@ -1,4 +1,4 @@
-const answers7 = [
+const words7 = [
 'aarrghh',
 'abalone',
 'abandon',
