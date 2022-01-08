@@ -1,32 +1,42 @@
-  1 REM 'WORD MASTER'
- 10 LET W$ = "TABLE"           // W word to guess
- 30 LET ROW = 2                // ROW is the top line where printing starts
- 35 FOR TURN=1 TO TURN=6       // 6 turns
- 40    INPUT I$                   // I guess word
- 50    IF LEN I$<>5 THEN GOTO 60  // repeat until I has a length of 5
- 60    PRINT AT LINE*TURN,13;I$ + " "
- 70    LET C=0                    // C number of correct letters found
+  1 REM WORD MASTER
+ 10 LET W$ = "TABLE"
+ 20 LET L=2
+ 25 LET O=0
+ 30 LET ROW = 2
+ 32 LET X$ = ""
+ 34 LET Y$ = ""
+ 35 FOR T=1 TO 6
+ 40    INPUT I$
+ 50    IF LEN I$<>5 THEN GOTO 60
+ 60    PRINT AT L*T,13;I$ + " "
+ 70    LET C=0
  80    FOR X=1 TO LEN W$
  90        FOR Y=1 TO LEN W$
-100            IF I$(Y)=W$(X) AND Y=X THEN GOSUB 200  // letter at good location
-110            IF I$(Y)=W$(X) AND Y<>X THEN PRINT AT LINE*TURN+1,0;I$(Y) + " MAL PLACE.";
+100            IF I$(Y)=W$(X) AND Y=X THEN GOSUB 200
+110            IF I$(Y)=W$(X) AND Y<>X THEN LET Y$=Y$+" "+I$(Y)
 120        NEXT Y
 130    NEXT X
-140    IF LETTERS = 5 THEN GOTO 230 // won
-150 NEXT TURN
-160 GOTO 250 // lost
+140    IF O = 5 THEN GOTO 230
+145    GOSUB 200
+150 NEXT T
+160 GOTO 250
 
-// good location
-200 PRINT AT LINE*TURN+1,0;I$(Y) + " BIEN PLACE. ";
-210 LETTERS = LETTERS + 1
+190 REM LETTER AT RIGHT LOCATION
+200 LET X$=X$+" "+I$(Y)
+210 LET O=O+1
 220 RETURN
 
-// WON
-230 PRINT AT 21,0;"YOU WON IN " + TURN + "TURNS";
-240 GOTO 270 // end
+230 REM WON
+240 PRINT AT 21,0;"YOU WON IN " + T + "TURNS";
+250 GOTO 320
 
-// LOST
-250 PRINT AT 21,0;"YOU LOST";
+260 REM END OF TURN
+270 PRINT X$ + "BIEN PLACE"
+280 PRINT Y$ + "MAL PLACE"
+290 RETURN
 
-270 PRINT " BYE"
-280 STOP     
+300 REM LOST
+310 PRINT AT 21,0;"YOU LOST";
+
+320 PRINT " BYE"
+330 STOP     
